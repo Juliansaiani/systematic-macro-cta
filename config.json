@@ -1,0 +1,57 @@
+{
+  "data": {
+    "snapshot_dir": "data/snapshot",
+    "cache_dir": "data/cache",
+    "start_date": "2006-01-01",
+    "end_date": "2024-12-31",
+    "universe": {
+      "SP500": {"ticker": "SPY", "class": "equity", "label": "S&P 500"},
+      "NASDAQ": {"ticker": "QQQ", "class": "equity", "label": "NASDAQ 100"},
+      "EUROSTOXX": {"ticker": "FEZ", "class": "equity", "label": "Euro Stoxx 50"},
+      "NIKKEI": {"ticker": "EWJ", "class": "equity", "label": "MSCI Japan (EWJ)"},
+      "FTSE": {"ticker": "EWU", "class": "equity", "label": "FTSE 100"},
+      "US2Y": {"ticker": "SHY", "class": "bond", "label": "US Treasury 2Y"},
+      "US10Y": {"ticker": "IEF", "class": "bond", "label": "US Treasury 10Y"},
+      "US30Y": {"ticker": "TLT", "class": "bond", "label": "US Treasury 30Y"},
+      "BUND": {"ticker": "BNDX", "class": "bond", "label": "Global Aggregate ex-US Bonds (BNDX)"},
+      "JGB": {"ticker": "IGOV", "class": "bond", "label": "Intl Treasury Bonds (IGOV)"},
+      "EURUSD": {"ticker": "FXE", "class": "fx", "label": "EUR/USD"},
+      "GBPUSD": {"ticker": "FXB", "class": "fx", "label": "GBP/USD"},
+      "USDJPY": {"ticker": "FXY", "class": "fx", "label": "JPY/USD (FXY)"},
+      "AUDUSD": {"ticker": "FXA", "class": "fx", "label": "AUD/USD"},
+      "USDCAD": {"ticker": "FXC", "class": "fx", "label": "CAD/USD (FXC)"},
+      "GOLD": {"ticker": "GLD", "class": "commodity", "label": "Gold"},
+      "SILVER": {"ticker": "SLV", "class": "commodity", "label": "Silver"},
+      "CRUDE": {"ticker": "USO", "class": "commodity", "label": "Crude Oil"},
+      "NATGAS": {"ticker": "UNG", "class": "commodity", "label": "Natural Gas"},
+      "COPPER": {"ticker": "CPER", "class": "commodity", "label": "Copper"},
+      "WHEAT": {"ticker": "WEAT", "class": "commodity", "label": "Wheat"},
+      "CORN": {"ticker": "CORN", "class": "commodity", "label": "Corn"}
+    }
+  },
+  "model": {
+    "horizons": [
+      {"label": "EWMA 16/64 days", "fast_d": 16, "slow_d": 64, "weight": 0.25},
+      {"label": "EWMA 32/128 days", "fast_d": 32, "slow_d": 128, "weight": 0.35},
+      {"label": "EWMA 64/256 days", "fast_d": 64, "slow_d": 256, "weight": 0.20}
+    ],
+    "momentum_lookback": 126,
+    "momentum_weight": 0.20,
+    "vol_lookback": 63,
+    "vol_standardization": 252
+  },
+  "portfolio": {
+    "target_vol_instrument": 0.15,
+    "target_vol_portfolio": 0.15,
+    "position_clip": 3.0,
+    "max_leverage": 3.0,
+    "train_window": 504,
+    "retrain_every": 21
+  },
+  "cost_bps": [0, 5],
+  "accounting": "lagged targets; simple portfolio returns; post-scaling leverage and position caps; self-financing drift-aware rebalancing with proportional fees; zero cash interest",
+  "verification": {
+    "reference": "tests/fixtures/reference_metrics.csv",
+    "absolute_tolerance": 1e-06
+  }
+}
