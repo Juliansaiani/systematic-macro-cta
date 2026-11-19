@@ -1,0 +1,5 @@
+variant,cost_bps,sharpe_error,cagr_error,ann_vol_error,max_drawdown_error
+Daily expanding,0,0.0,0.0,0.0,0.0
+Daily expanding,5,0.0,0.0,0.0,0.0
+Monthly rolling,0,0.0,0.0,0.0,0.0
+Monthly rolling,5,0.0,0.0,0.0,0.0

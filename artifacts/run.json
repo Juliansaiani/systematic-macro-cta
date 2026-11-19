@@ -1,0 +1,64 @@
+{
+  "accounting_version": 2,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python_version": "3.14.7 | packaged by Anaconda, Inc. | (main, Aug 14 2026, 10:12:46) [MSC v.1942 64 bit (AMD64)]",
+  "packages": {
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2",
+    "yfinance": "1.8.0"
+  },
+  "n_instruments": 22,
+  "source_tickers": {
+    "SP500": "SPY",
+    "NASDAQ": "QQQ",
+    "EUROSTOXX": "FEZ",
+    "NIKKEI": "EWJ",
+    "FTSE": "EWU",
+    "US2Y": "SHY",
+    "US10Y": "IEF",
+    "US30Y": "TLT",
+    "BUND": "BNDX",
+    "JGB": "IGOV",
+    "EURUSD": "FXE",
+    "GBPUSD": "FXB",
+    "USDJPY": "FXY",
+    "AUDUSD": "FXA",
+    "USDCAD": "FXC",
+    "GOLD": "GLD",
+    "SILVER": "SLV",
+    "CRUDE": "USO",
+    "NATGAS": "UNG",
+    "COPPER": "CPER",
+    "WHEAT": "WEAT",
+    "CORN": "CORN"
+  },
+  "history_start": "2013-06-05",
+  "history_end": "2024-12-31",
+  "evaluation_start": "2015-06-05",
+  "evaluation_end": "2024-12-31",
+  "evaluation_days": 2410,
+  "config_sha256": "a3c405dd96898c82f62166d3f28cb8af377076e689aa3791623272ad5a6d9d8b",
+  "input_sha256": {
+    "prices.csv": "73ba1dc9b03b903442ef4b36b2c589c5202dfa37737ae9b7d3d6d0ba472c5232",
+    "returns.csv": "001df77ec6f832506744776f577e9d79b880fc67d3982da47bf3449392a478c6"
+  },
+  "input_provenance": "Tracked adjusted-price snapshot (data/snapshot); configured tickers",
+  "code_sha256": {
+    "data.py": "9a460b7c9ad71863f9070b30fe7ec83c1280c4b500d188c92c1e2b3edca24c90",
+    "models.py": "b74b686a0e30b841ddb902d704e7c69601715133a6a71efb72076da3a27349b4",
+    "portfolio.py": "a9d7449fa028d25f484d642e658bc0f1ac2d2a19f376bee935b6a852da9e73aa",
+    "pipeline.py": "1e68d52d0054af0340e1903d65a949c37a2f04f985d7a245fb98753e4488563f"
+  },
+  "cash_interest": 0.0,
+  "sharpe_reference_rate_annual": 0.0,
+  "benchmark_cost_bps": 0,
+  "strategy_cost_bps": [
+    0,
+    5
+  ],
+  "leverage_cap_basis": "after-fee NAV at daily rebalance; may drift intraday",
+  "signal_history": "Log returns; numeric spans unchanged; no parameter search",
+  "reference_is": "numerical regression baseline, not independent financial validation"
+}
