@@ -183,6 +183,33 @@ def generate_figures(series_dict: dict, crisis_df: pd.DataFrame, output_dir: Pat
     fig_crises.savefig(output_dir / "crisis_episodes.png", dpi=160, bbox_inches="tight")
     plt.close(fig_crises)
 
+    # Export Full-Sample Cumulative Wealth figure (full_sample.png)
+    fig_full, ax_f = plt.subplots(figsize=(13.5, 5.2))
+    monthly_s = series_dict.get("Monthly rolling (5 bps)")
+    for series, color, ls, lw, lbl in [
+        (cta_s, "#1f77b4", "-", 2.0, "Daily expanding (Net 5 bps)"),
+        (monthly_s, "#2ca02c", "-", 1.8, "Monthly rolling 21d (Net 5 bps)"),
+        (b6040_s, "#7f7f7f", "--", 1.5, "Global 60/40 (Gross)"),
+        (eq_s, "#d62728", ":", 1.4, "Equity basket (Gross)"),
+    ]:
+        if series is not None and len(series) > 0:
+            cum = np.r_[100.0, np.cumprod(1.0 + series.values) * 100.0]
+            dates_full = pd.DatetimeIndex([series.index[0] - pd.offsets.BDay(1)] + list(series.index))
+            ax_f.plot(dates_full, cum, color=color, ls=ls, lw=lw, label=f"{lbl} ({cum[-1] / 100.0 - 1.0:+.1%})")
+    ax_f.axhline(100.0, color="black", lw=0.7, alpha=0.5)
+    ax_f.set_title("Full-Sample Indexed Cumulative Performance (Base = 100)", fontsize=12.5, fontweight="bold", pad=10)
+    ax_f.set_ylabel("Indexed Wealth (Base 100)", fontsize=10)
+    ax_f.xaxis.set_major_locator(mdates.AutoDateLocator(maxticks=10))
+    ax_f.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax_f.grid(alpha=0.25, linestyle=":")
+    ax_f.spines[["top", "right"]].set_visible(False)
+    handles_f, _ = ax_f.get_legend_handles_labels()
+    if handles_f:
+        ax_f.legend(loc="upper left", frameon=True, facecolor="white", edgecolor="#cccccc", fontsize=9.2)
+    fig_full.tight_layout()
+    fig_full.savefig(output_dir / "full_sample.png", dpi=160, bbox_inches="tight")
+    plt.close(fig_full)
+
 
 def _file_hash(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -218,7 +245,7 @@ def run(root: Path, verify: bool = False, write_reference: bool = False, refresh
         raise ValueError("Missing signals inside the common evaluation window.")
 
     portfolio = config["portfolio"]
-    metrics_records, scores_records, daily_series, diagnostics = [], [], {}, {}
+    metrics_records, daily_series, diagnostics = [], {}, {}
 
     for name, targets in [("Daily expanding", daily_targets), ("Monthly rolling", monthly_targets)]:
         for cost in config["cost_bps"]:
@@ -240,23 +267,6 @@ def run(root: Path, verify: bool = False, write_reference: bool = False, refresh
                 **perf,
             })
 
-            tag = "gross" if cost == 0 else f"net_{cost}bps"
-            mode_prefix = "" if name == "Daily expanding" else "monthly_"
-            sr_gross = float(sim.net_return.mean() * np.sqrt(252) / (sim.net_return.std() + 1e-9))
-            sr_rf2 = float((sim.net_return.mean() - 0.02 / 252) * np.sqrt(252) / (sim.net_return.std() + 1e-9))
-            scores_records.append({
-                "mode": f"{mode_prefix}{tag}",
-                "cost_bps": cost,
-                "days": len(sim.net_return),
-                "total_return": perf["total_return"],
-                "cagr": perf["cagr"],
-                "volatility": perf["ann_vol"],
-                "sharpe": sr_gross,
-                "sharpe_rf_2pct": sr_rf2,
-                "max_drawdown": perf["max_drawdown"],
-                "mean_annual_turnover": annual_turnover,
-            })
-
             if name == "Daily expanding" and cost == 0:
                 daily_series["Daily expanding (Gross)"] = sim.net_return
             if cost == 5:
@@ -273,7 +283,6 @@ def run(root: Path, verify: bool = False, write_reference: bool = False, refresh
     daily_series["Equity basket"] = eq_ret
 
     metrics_df = pd.DataFrame(metrics_records)
-    scores_df = pd.DataFrame(scores_records)
     returns_df = pd.DataFrame(daily_series)
 
     # Verification compares metrics against regression baseline
@@ -335,7 +344,6 @@ def run(root: Path, verify: bool = False, write_reference: bool = False, refresh
     artifacts = root / "artifacts"
     artifacts.mkdir(parents=True, exist_ok=True)
     metrics_df.to_csv(artifacts / "metrics.csv", index=False)
-    scores_df.to_csv(artifacts / "scores.csv", index=False)
     returns_df.to_csv(artifacts / "daily_returns.csv", index_label="Date")
     pd.DataFrame(diagnostics).to_csv(artifacts / "execution_checks.csv", index_label="Date")
     if not crisis_df.empty:

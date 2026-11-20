@@ -15,10 +15,12 @@ Over the complete 9.6-year sample, standalone returns are modest after `5 bps` t
 | **Monthly rolling (21d signal)** | 0 bps (Gross) | +80.85% | +6.39% | 13.77% | 0.52 | -20.23% | 23.8x NAV |
 | **Monthly rolling (21d signal)** | **5 bps (Net)** | **+61.40%** | **+5.13%** | **13.78%** | **0.43** | **-21.60%** | **23.8x NAV** |
 
-- **Turnover Dampening:** Freezing directional signal signs on a 21-day cadence (`Monthly rolling`) while keeping daily volatility targeting cuts annual turnover from 40.1x to 23.8x NAV, raising net full-sample Sharpe from 0.40 to 0.43 (+5.13% vs. +4.56% net CAGR).
+- **Monthly Rebalancing Cadence:** Refreshing rolling-window target positions every 21 trading days while retaining daily portfolio volatility scaling cuts annual turnover from 40.1x to 23.8x NAV, raising net full-sample Sharpe from 0.40 to 0.43 (+5.13% vs. +4.56% net CAGR).
 - **Whipsaw & Non-Monotonic Stress Regimes:** During shorter equity pullbacks where trend signals lag or reverse quickly (e.g., Q4 2018), trend-following does not guarantee positive returns; its value lies in sustained directional repricing rather than all short-term dips.
 
-All full-sample rows are logged in [metrics.csv](artifacts/metrics.csv) and [scores.csv](artifacts/scores.csv).
+All full-sample rows are logged in [metrics.csv](artifacts/metrics.csv).
+
+![Full-Sample Cumulative Performance (2015–2024)](artifacts/full_sample.png)
 
 ## Behavior During Selected Stress Episodes & 2020–2022 Cycle
 
@@ -61,6 +63,7 @@ By default, `--verify` reads the tracked adjusted-price snapshot in `data/snapsh
 
 ## Methodological Limits & Release Note
 
-- **ETF Proxies vs. Futures:** Modeling `22` US-listed ETFs (`SPY`, `TLT`, `GLD`, `USO`, etc.) up to `3.0x` gross leverage omits real margin financing, short-borrow fees, and ETF tracking drag that would not apply identically to unfunded exchange-traded futures.
+- **ETF Proxies vs. Futures:** I chose `22` liquid US-listed ETFs (`SPY`, `TLT`, `GLD`, `USO`, etc.) instead of splicing continuous futures rolls so dividend/roll adjustments stay directly auditable from `data/snapshot/`, even though scaling ETFs up to `3.0x` gross leverage omits margin financing, short-borrow fees, and ETF tracking drag.
+- **Rebalance Cadence & Horizon Choices:** Retaining daily portfolio risk scaling while refreshing rolling-window target positions every 21 trading days was tested to reduce turnover (`23.8x` vs. `40.1x` NAV) without abandoning intra-month volatility control; signal horizons (`16/64`, `32/128`, `64/256` plus 126-day TSMOM) were fixed ex ante rather than tuned over the `2015–2024` panel.
 - **Close-Mark Execution:** Signals assume execution at closing marks with a flat `5 bps` turnover fee, abstracting from intraday slippage and cross-time-zone settlement differences.
 - **Release Timeline:** Research conducted in 2025; packaged with deterministic snapshot verification and published in 2026. MIT License — Copyright (c) 2025 Julian Saiani.

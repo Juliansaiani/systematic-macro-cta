@@ -47,9 +47,9 @@
   "input_provenance": "Tracked adjusted-price snapshot (data/snapshot); configured tickers",
   "code_sha256": {
     "data.py": "9a460b7c9ad71863f9070b30fe7ec83c1280c4b500d188c92c1e2b3edca24c90",
-    "models.py": "b74b686a0e30b841ddb902d704e7c69601715133a6a71efb72076da3a27349b4",
-    "portfolio.py": "a9d7449fa028d25f484d642e658bc0f1ac2d2a19f376bee935b6a852da9e73aa",
-    "pipeline.py": "1e68d52d0054af0340e1903d65a949c37a2f04f985d7a245fb98753e4488563f"
+    "models.py": "b471c87c6fcdc6978094ee63f6d326d207ca15add03850248060e525c3925481",
+    "portfolio.py": "2aa1be0ae67d2774cfbcf052fc3ce52b7ea7160aa8d8b994476a8d7e62e5f733",
+    "pipeline.py": "7e925b0092b478f57b6726c0f01d18684e60dab46ea3fb22f4486b27b7dc27ba"
   },
   "cash_interest": 0.0,
   "sharpe_reference_rate_annual": 0.0,

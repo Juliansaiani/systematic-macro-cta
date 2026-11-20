@@ -124,21 +124,6 @@ def simulate_strategy(
     )
 
 
-def run_walk_forward(returns: pd.DataFrame, portfolio_config: Dict, model_config: Dict, cost_bps: float) -> pd.Series:
-    """Compatibility wrapper: input is log returns; output is net simple return."""
-    positions = rolling_positions(returns, portfolio_config, model_config)
-    active = positions.shift(1).notna().all(axis=1)
-    if not active.any():
-        raise ValueError("Not enough history for rolling signals.")
-    return simulate_strategy(
-        np.expm1(returns), positions, cost_bps,
-        target_vol_portfolio=portfolio_config.get("target_vol_portfolio", 0.15),
-        max_leverage=portfolio_config.get("max_leverage", 3.0),
-        position_clip=portfolio_config.get("position_clip", 3.0),
-        evaluation_start=active[active].index[0],
-    ).net_return
-
-
 def score_performance(returns: pd.Series, rf_annual: float = 0.0) -> Dict[str, float]:
     """Compound simple returns; annualize arithmetic daily excess-return Sharpe."""
     values = returns.to_numpy(dtype=float)

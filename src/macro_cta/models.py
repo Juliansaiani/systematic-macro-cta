@@ -10,7 +10,6 @@ def single_asset_signal(
     slow_d: int,
     momentum_lookback: int = 126,
     vol_lookback: int = 63,
-    vol_standardization: int = 252,
     momentum_weight: float = 0.20,
 ) -> pd.Series:
     """Calculate volatility-standardized EWMA crossover + TSMOM signal for a single asset on log-prices."""
